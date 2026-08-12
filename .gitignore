@@ -1,0 +1,9 @@
+# Local development environment
+.gemini/
+.agents/
+.system_generated/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

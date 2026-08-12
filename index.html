@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NutriPulse AI - A smart sports nutrition and wellness tracker powered by Fireworks AI to scan food, log calories, track macronutrients, and receive customized health advice.">
+    <meta name="keywords" content="nutrition tracker, AI wellness coach, calorie counter, macro tracker, food scanner, healthy recipes, Fireworks AI">
+    <title>NutriPulse AI - Smart Nutrition & Wellness Coach</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Signup Gateway Screen -->
+    <div class="auth-wrapper" id="auth-wrapper">
+        <div class="auth-card glass-card">
+            <div class="auth-brand">
+                <div class="logo-icon-mono">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15.5h-2v-6h2v6zm0-8h-2v-2h2v2z"/>
+                    </svg>
+                </div>
+                <h2>NutriPulse<span>AI</span></h2>
+            </div>
+            
+            <div class="auth-header">
+                <h3>Create Your Wellness Profile</h3>
+                <p>Let's personalize your daily calorie and macronutrient targets.</p>
+            </div>
+
+            <form id="signup-form" onsubmit="event.preventDefault();">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group row">
+                    <div>
+                        <label for="signup-age">Age</label>
+                        <input type="number" id="signup-age" min="10" max="100" value="25" required>
+                    </div>
+                    <div>
+                        <label for="signup-weight">Weight (kg)</label>
+                        <input type="number" id="signup-weight" min="30" max="250" value="70" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div>
+                        <label for="signup-height">Height (cm)</label>
+                        <input type="number" id="signup-height" min="100" max="250" value="175" required>
+                    </div>
+                    <div>
+                        <label for="signup-goal">Primary Goal</label>
+                        <select id="signup-goal" required>
+                            <option value="maintain">Maintain Weight</option>
+                            <option value="lose">Weight Loss</option>
+                            <option value="gain">Build Muscle</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="signup-submit-btn">
+                    <span>Initialize Profile</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div class="app-container" id="app-container" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15.5h-2v-6h2v6zm0-8h-2v-2h2v2z"/>
+                    </svg>
+                </div>
+                <h2>NutriPulse<span>AI</span></h2>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-tab="dashboard">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" id="open-settings-nav">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>API Settings</span>
+                </a>
+            </nav>
+
+            <!-- Profile Overview Summary -->
+            <div class="sidebar-profile-card">
+                <span class="profile-label">USER PROFILE</span>
+                <h4 id="side-user-name">Loading...</h4>
+                <p id="side-user-goal">Goal: Maintain</p>
+                <div class="profile-stat-bar">
+                    <div>
+                        <span class="label">BMI</span>
+                        <span class="value" id="side-user-bmi">--</span>
+                    </div>
+                    <div>
+                        <span class="label">Weight</span>
+                        <span class="value" id="side-user-weight">-- kg</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-status-badge inactive" id="api-status-badge">
+                <span class="status-dot"></span>
+                <span class="status-text">Fireworks Offline</span>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="welcome">
+                    <h1>Your Wellness Hub</h1>
+                    <p>Track metrics, analyze meals, and converse with your AI nutrition guide.</p>
+                </div>
+                <div class="user-profile">
+                    <button class="settings-btn" id="logout-btn" title="Sign Out" style="margin-right: 0.5rem;">
+                        <span>Sign Out</span>
+                    </button>
+                    <button class="settings-btn" id="open-settings-btn" title="API Settings">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        <span>Configure API</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-grid">
+                <!-- Left Section: Dashboard & Loggers -->
+                <div class="dashboard-section">
+                    <!-- Progress Grid -->
+                    <div class="metric-row">
+                        <!-- Calories Card -->
+                        <div class="glass-card main-stats-card">
+                            <div class="card-header">
+                                <h3>Calorie Budget</h3>
+                                <span class="tag" id="calorie-percentage">0%</span>
+                            </div>
+                            <div class="calorie-progress-container">
+                                <div class="circular-progress" id="calorie-progress">
+                                    <svg class="progress-ring" width="160" height="160">
+                                        <circle class="progress-ring-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="8" fill="transparent" r="72" cx="80" cy="80" />
+                                        <circle class="progress-ring-value" id="calorie-ring-val" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="transparent" r="72" cx="80" cy="80" />
+                                    </svg>
+                                    <div class="progress-inner-text">
+                                        <span class="value" id="current-calories">0</span>
+                                        <span class="label">of <span id="target-calories">2,000</span> kcal</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Macro Chart Card (Canvas) -->
+                        <div class="glass-card macro-chart-card">
+                            <h3>Macronutrient Mix</h3>
+                            <div class="canvas-wrapper">
+                                <canvas id="macro-canvas" width="130" height="130"></canvas>
+                                <div class="canvas-legend">
+                                    <div class="legend-item"><span class="legend-dot protein"></span> Protein: <span id="leg-protein">0g</span></div>
+                                    <div class="legend-item"><span class="legend-dot carbs"></span> Carbs: <span id="leg-carbs">0g</span></div>
+                                    <div class="legend-item"><span class="legend-dot fat"></span> Fat: <span id="leg-fat">0g</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Water Tracker & Quick Actions -->
+                    <div class="metric-row secondary">
+                        <!-- Water Card -->
+                        <div class="glass-card water-card">
+                            <div class="card-header">
+                                <h3>Hydration Tracker</h3>
+                                <span class="tag" id="water-text">0 / 2500 ml</span>
+                            </div>
+                            <div class="water-tracker-visual">
+                                <div class="water-container">
+                                    <div class="water-level" id="water-fluid" style="height: 0%">
+                                        <div class="water-wave"></div>
+                                    </div>
+                                    <div class="water-bottle-outline"></div>
+                                </div>
+                                <div class="water-controls">
+                                    <button class="btn btn-water" id="add-water-250">+250 ml</button>
+                                    <button class="btn btn-water" id="add-water-500">+500 ml</button>
+                                    <button class="btn btn-secondary btn-icon" id="reset-water" title="Reset Water">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Meal Logger Card -->
+                        <div class="glass-card meal-logger-card">
+                            <h3>Quick Meal Scan</h3>
+                            <p class="card-desc">Type your meal or upload a photo for AI analysis.</p>
+                            
+                            <div class="logger-tabs">
+                                <button class="log-tab active" id="tab-text">Text Description</button>
+                                <button class="log-tab" id="tab-image">Photo Upload</button>
+                            </div>
+
+                            <div class="log-input-container">
+                                <!-- Text Input Area -->
+                                <div class="input-panel active" id="panel-text">
+                                    <textarea id="meal-description-input" placeholder="e.g., Two scrambled eggs, one slice of whole-wheat toast, and half an avocado..."></textarea>
+                                </div>
+
+                                <!-- Image Upload Area -->
+                                <div class="input-panel" id="panel-image">
+                                    <div class="upload-dropzone" id="dropzone">
+                                        <input type="file" id="file-input" accept="image/*" style="display: none;">
+                                        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                        <p>Drag food photo here or <span>browse files</span></p>
+                                        <div class="preview-container" id="image-preview-box" style="display: none;">
+                                            <img id="image-preview" src="#" alt="Preview">
+                                            <button class="remove-preview-btn" id="remove-preview">&times;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary btn-block" id="analyze-meal-btn">
+                                <span>Scan & Log Meal</span>
+                                <div class="spinner" style="display: none;"></div>
+                            </button>
+
+                            <!-- Scanner Overlay Animation -->
+                            <div class="scanner-overlay" id="scanner-overlay">
+                                <div class="scanner-bar"></div>
+                                <p class="scanner-msg">Analyzing nutritional value...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Trend Card -->
+                    <div class="glass-card trend-card">
+                        <div class="card-header">
+                            <h3>7-Day Calorie Trends</h3>
+                            <span class="tag">Weekly Analytics</span>
+                        </div>
+                        <div class="trend-chart-container">
+                            <canvas id="trend-canvas" height="150"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Logs Table -->
+                    <div class="glass-card meal-logs-card">
+                        <div class="card-header">
+                            <h3>Food Journal</h3>
+                            <div class="journal-controls">
+                                <input type="text" id="log-search-input" placeholder="Filter journal..." class="search-input">
+                                <button class="btn btn-secondary btn-sm" id="export-report-btn">Export Report</button>
+                                <button class="btn btn-secondary btn-sm" id="clear-all-meals">Clear All</button>
+                            </div>
+                        </div>
+                        <div class="logs-container">
+                            <table class="logs-table">
+                                <thead>
+                                    <tr>
+                                        <th>Meal / Description</th>
+                                        <th>Calories</th>
+                                        <th>Macros (P / C / F)</th>
+                                        <th>Tags</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="meal-logs-tbody">
+                                    <!-- Dynamic Items -->
+                                </tbody>
+                            </table>
+                            <div class="empty-state" id="logs-empty-state">
+                                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                <p>No matches found in your journal.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Section: AI Chat Coach -->
+                <div class="chat-section">
+                    <div class="glass-card chat-card">
+                        <div class="chat-header">
+                            <div class="coach-profile">
+                                <div class="avatar">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                                </div>
+                                <div class="coach-meta">
+                                    <h4>NutriPulse Coach</h4>
+                                    <span class="active-badge">AI Assistant</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary btn-icon" id="clear-chat" title="Clear Chat">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </button>
+                        </div>
+
+                        <!-- Chat Messages Container -->
+                        <div class="chat-messages" id="chat-messages-container">
+                            <div class="message system-message">
+                                <p>Hi! I'm your NutriPulse Coach. I can help analyze meals, adjust recipes, suggest healthy alternatives, or plan your goals. Ask me anything!</p>
+                            </div>
+                        </div>
+
+                        <!-- Suggestions chips -->
+                        <div class="suggestions-wrapper">
+                            <div class="suggestions-container" id="suggestions-box">
+                                <button class="suggestion-chip">Suggest high-protein snacks</button>
+                                <button class="suggestion-chip">Make a low-sodium dinner plan</button>
+                                <button class="suggestion-chip">Adapting pasta for low carb</button>
+                                <button class="suggestion-chip">Analyze my daily intake</button>
+                            </div>
+                        </div>
+
+                        <!-- Input Bar -->
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-user-input" placeholder="Ask your coach anything...">
+                            <button class="btn btn-primary" id="chat-send-btn">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- API Settings Modal -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2>API Settings Configuration</h2>
+                <button class="close-modal" id="close-settings-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">
+                    Enter your Fireworks API Key below to activate live, state-of-the-art AI analysis and advice. 
+                    <span class="warning-text">Your API key is saved strictly inside your local browser memory (localStorage) and never uploaded to any backend.</span>
+                </p>
+                
+                <div class="form-group">
+                    <label for="api-key-input">Fireworks API Key</label>
+                    <input type="password" id="api-key-input" placeholder="fw_...">
+                </div>
+
+                <div class="form-group">
+                    <label for="model-select">Selected Model</label>
+                    <select id="model-select">
+                        <option value="accounts/fireworks/models/llama-v3p1-70b-instruct">Llama 3.1 70B Instruct (Recommended)</option>
+                        <option value="accounts/fireworks/models/llama-v3p1-8b-instruct">Llama 3.1 8B Instruct (Faster)</option>
+                        <option value="accounts/fireworks/models/qwen2p5-72b-instruct">Qwen 2.5 72B Instruct</option>
+                    </select>
+                </div>
+
+                <div class="form-group row">
+                    <div>
+                        <label for="profile-calories">Daily Calorie Target</label>
+                        <input type="number" id="profile-calories" value="2000" min="1000" max="6000">
+                    </div>
+                    <div>
+                        <label for="profile-protein">Protein Goal (g)</label>
+                        <input type="number" id="profile-protein" value="130" min="40" max="300">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div>
+                        <label for="profile-carbs">Carbs Goal (g)</label>
+                        <input type="number" id="profile-carbs" value="220" min="50" max="600">
+                    </div>
+                    <div>
+                        <label for="profile-fat">Fat Goal (g)</label>
+                        <input type="number" id="profile-fat" value="65" min="20" max="200">
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="reset-api-settings">Disconnect Key</button>
+                    <button class="btn btn-primary" id="save-api-settings">Save Configurations</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
