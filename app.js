@@ -736,9 +736,13 @@ async function handleMealAnalysis() {
 
             const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
             if (jsonMatch) {
-                loggedMeal = JSON.parse(jsonMatch[0]);
+                try {
+                    loggedMeal = JSON.parse(jsonMatch[0]);
+                } catch (e) {
+                    throw new Error(`Invalid JSON syntax from AI. Raw output: ${rawResponse.substring(0, 150)}`);
+                }
             } else {
-                throw new Error("Unable to parse JSON block from AI output.");
+                throw new Error(`Unable to parse JSON block from AI output. Raw output: ${rawResponse.substring(0, 150)}`);
             }
         } else {
             // Simulated local offline match
