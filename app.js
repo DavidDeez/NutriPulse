@@ -4,7 +4,7 @@ const STATE = {
     meals: JSON.parse(localStorage.getItem('nutripulse_meals')) || [],
     water: parseInt(localStorage.getItem('nutripulse_water')) || 0,
     apiKey: localStorage.getItem('nutripulse_apikey') || '',
-    selectedModel: localStorage.getItem('nutripulse_model') || 'accounts/fireworks/models/llama-v3p1-70b-instruct',
+    selectedModel: localStorage.getItem('nutripulse_model') || 'accounts/fireworks/models/deepseek-v4-pro',
     targets: JSON.parse(localStorage.getItem('nutripulse_targets')) || {
         calories: 2000,
         protein: 130,
@@ -17,6 +17,12 @@ const STATE = {
     ],
     searchFilter: ''
 };
+
+// Force upgrade broken cached models to DeepSeek v4
+if (STATE.selectedModel.includes('llama') || STATE.selectedModel.includes('qwen2p5')) {
+    STATE.selectedModel = 'accounts/fireworks/models/deepseek-v4-pro';
+    localStorage.setItem('nutripulse_model', STATE.selectedModel);
+}
 
 // Mock Database for offline mode/fallbacks
 const MOCK_MEALS_DATABASE = [
@@ -627,7 +633,7 @@ async function queryFireworksAPI(systemPrompt, userPrompt, base64Image = null) {
 
     if (base64Image) {
         // Swap to visual model automatically for multimodal request
-        modelName = 'accounts/fireworks/models/llama-v3p2-11b-vision-instruct';
+        modelName = 'accounts/fireworks/models/deepseek-v4-pro';
         messageContent = [
             { type: 'text', text: userPrompt },
             {
@@ -658,7 +664,11 @@ async function queryFireworksAPI(systemPrompt, userPrompt, base64Image = null) {
     
     if (!response.ok) {
         const errText = await response.text();
-        throw new Error(`API Error: ${response.status} - ${errText}`);
+        let hint = '';
+        if (response.status === 401) hint = ' — Invalid API key. Double-check your key in Settings.';
+        if (response.status === 404) hint = ' — Model not found. Open Settings and switch to DeepSeek v4 Pro.';
+        if (response.status === 429) hint = ' — Rate limit hit. Wait a moment and try again.';
+        throw new Error(`API Error ${response.status}${hint}`);
     }
     
     const data = await response.json();
