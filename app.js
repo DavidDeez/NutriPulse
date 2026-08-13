@@ -633,7 +633,7 @@ async function queryFireworksAPI(systemPrompt, userPrompt, base64Image = null) {
 
     if (base64Image) {
         // Swap to visual model automatically for multimodal request
-        modelName = 'accounts/fireworks/models/deepseek-v4-pro';
+        modelName = 'accounts/fireworks/models/qwen3p7-plus';
         messageContent = [
             { type: 'text', text: userPrompt },
             {
