@@ -18,6 +18,12 @@ const STATE = {
     searchFilter: ''
 };
 
+// Force fix cached invalid models to Llama 3.1
+if (!STATE.selectedModel.includes('llama-v3p1')) {
+    STATE.selectedModel = 'accounts/fireworks/models/llama-v3p1-70b-instruct';
+    localStorage.setItem('TikTok Pulse_model', STATE.selectedModel);
+}
+
 
 // Mock Database for offline mode/fallbacks
 const MOCK_MEALS_DATABASE = [
@@ -1040,3 +1046,4 @@ function setupEventListeners() {
         if (STATE.userProfile) drawTrendChart();
     });
 }
+
