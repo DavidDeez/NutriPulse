@@ -667,7 +667,7 @@ async function queryFireworksAPI(systemPrompt, userPrompt, base64Image = null) {
         const errText = await response.text();
         let hint = '';
         if (response.status === 401) hint = ' — Invalid API key. Double-check your key in Settings.';
-        if (response.status === 404) hint = ' — Model not found. Open Settings and select a valid Llama 3 model.';
+        if (response.status === 404) hint = ' — Fireworks says: ' + errText;
         if (response.status === 429) hint = ' — Rate limit hit. Wait a moment and try again.';
         throw new Error(`API Error ${response.status}${hint}`);
     }
