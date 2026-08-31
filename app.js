@@ -4,7 +4,7 @@ const STATE = {
     meals: JSON.parse(localStorage.getItem('TikTok Pulse_meals')) || [],
     water: parseInt(localStorage.getItem('TikTok Pulse_water')) || 0,
     apiKey: localStorage.getItem('TikTok Pulse_apikey') || '',
-    selectedModel: localStorage.getItem('TikTok Pulse_model') || 'accounts/fireworks/models/llama-v3p1-70b-instruct',
+    selectedModel: localStorage.getItem('TikTok Pulse_model') || 'accounts/fireworks/models/llama-v3p1-8b-instruct',
     targets: JSON.parse(localStorage.getItem('TikTok Pulse_targets')) || {
         calories: 2000,
         protein: 130,
@@ -20,7 +20,7 @@ const STATE = {
 
 // Force fix cached invalid models to Llama 3.1
 if (!STATE.selectedModel.includes('llama-v3p1')) {
-    STATE.selectedModel = 'accounts/fireworks/models/llama-v3p1-70b-instruct';
+    STATE.selectedModel = 'accounts/fireworks/models/llama-v3p1-8b-instruct';
     localStorage.setItem('TikTok Pulse_model', STATE.selectedModel);
 }
 
@@ -1046,4 +1046,5 @@ function setupEventListeners() {
         if (STATE.userProfile) drawTrendChart();
     });
 }
+
 
