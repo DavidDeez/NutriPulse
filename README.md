@@ -1,6 +1,6 @@
-# NutriPulse AI - Smart Sports Nutrition & Wellness Coach
+# TikTok Pulse AI - Smart Sports Nutrition & Wellness Coach
 
-NutriPulse AI is an advanced, client-side web application designed to help users track their daily calories, manage macronutrients, log water intake, and consult a personal AI sports nutrition coach. It features a premium, minimalist monochrome glassmorphism UI with interactive animations.
+TikTok Pulse AI is an advanced, client-side web application designed to help users track their daily calories, manage macronutrients, log water intake, and consult a personal AI sports nutrition coach. It features a premium, minimalist monochrome glassmorphism UI with interactive animations.
 
 ## 🚀 Key Features
 

@@ -1,28 +1,23 @@
 // State Management
 const STATE = {
-    userProfile: JSON.parse(localStorage.getItem('nutripulse_user_profile')) || null,
-    meals: JSON.parse(localStorage.getItem('nutripulse_meals')) || [],
-    water: parseInt(localStorage.getItem('nutripulse_water')) || 0,
-    apiKey: localStorage.getItem('nutripulse_apikey') || '',
-    selectedModel: localStorage.getItem('nutripulse_model') || 'accounts/fireworks/models/deepseek-v4-pro',
-    targets: JSON.parse(localStorage.getItem('nutripulse_targets')) || {
+    userProfile: JSON.parse(localStorage.getItem('TikTok Pulse_user_profile')) || null,
+    meals: JSON.parse(localStorage.getItem('TikTok Pulse_meals')) || [],
+    water: parseInt(localStorage.getItem('TikTok Pulse_water')) || 0,
+    apiKey: localStorage.getItem('TikTok Pulse_apikey') || '',
+    selectedModel: localStorage.getItem('TikTok Pulse_model') || 'accounts/fireworks/models/llama-v3p1-70b-instruct',
+    targets: JSON.parse(localStorage.getItem('TikTok Pulse_targets')) || {
         calories: 2000,
         protein: 130,
         carbs: 220,
         fat: 65
     },
-    weeklyHistory: JSON.parse(localStorage.getItem('nutripulse_weekly_history')) || null,
-    chatHistory: JSON.parse(localStorage.getItem('nutripulse_chat')) || [
-        { role: 'assistant', content: "Hi! I'm your NutriPulse Coach. I can help analyze meals, adjust recipes, suggest healthy alternatives, or plan your goals. Ask me anything!" }
+    weeklyHistory: JSON.parse(localStorage.getItem('TikTok Pulse_weekly_history')) || null,
+    chatHistory: JSON.parse(localStorage.getItem('TikTok Pulse_chat')) || [
+        { role: 'assistant', content: "Hi! I'm your TikTok Pulse Coach. I can help analyze meals, adjust recipes, suggest healthy alternatives, or plan your goals. Ask me anything!" }
     ],
     searchFilter: ''
 };
 
-// Force upgrade broken cached models to DeepSeek v4
-if (STATE.selectedModel.includes('llama') || STATE.selectedModel.includes('qwen2p5')) {
-    STATE.selectedModel = 'accounts/fireworks/models/deepseek-v4-pro';
-    localStorage.setItem('nutripulse_model', STATE.selectedModel);
-}
 
 // Mock Database for offline mode/fallbacks
 const MOCK_MEALS_DATABASE = [
@@ -154,7 +149,7 @@ function initWeeklyHistory() {
             const offset = (Math.random() - 0.5) * 400; // variance
             return { day: day, calories: Math.round(target + offset), isToday: false };
         });
-        localStorage.setItem('nutripulse_weekly_history', JSON.stringify(STATE.weeklyHistory));
+        localStorage.setItem('TikTok Pulse_weekly_history', JSON.stringify(STATE.weeklyHistory));
     }
 }
 
@@ -535,7 +530,7 @@ function exportReport() {
         mealsMd += `| ${meal.time || 'Logged'} | ${meal.name} | ${meal.calories} | ${meal.protein}g | ${meal.carbs}g | ${meal.fat}g | ${meal.tags ? meal.tags.join(', ') : '-'} |\n`;
     });
 
-    const reportMd = `# NutriPulse AI Daily Wellness Report
+    const reportMd = `# TikTok Pulse AI Daily Wellness Report
 **Date**: ${dateStr}
 **User**: ${STATE.userProfile ? STATE.userProfile.name : 'Wellness User'}
 
@@ -555,14 +550,14 @@ function exportReport() {
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 ${mealsMd}
 ---
-*Generated securely by NutriPulse AI.*
+*Generated securely by TikTok Pulse AI.*
 `;
 
     const blob = new Blob([reportMd], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `NutriPulse_Report_${new Date().toISOString().slice(0, 10)}.md`;
+    a.download = `TikTok Pulse_Report_${new Date().toISOString().slice(0, 10)}.md`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -593,14 +588,14 @@ function renderChatMessages() {
 function addMeal(meal) {
     meal.time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     STATE.meals.unshift(meal);
-    localStorage.setItem('nutripulse_meals', JSON.stringify(STATE.meals));
+    localStorage.setItem('TikTok Pulse_meals', JSON.stringify(STATE.meals));
     renderDashboard();
     renderMealLogs();
 }
 
 function deleteMeal(idx) {
     STATE.meals.splice(idx, 1);
-    localStorage.setItem('nutripulse_meals', JSON.stringify(STATE.meals));
+    localStorage.setItem('TikTok Pulse_meals', JSON.stringify(STATE.meals));
     renderDashboard();
     renderMealLogs();
 }
@@ -608,7 +603,7 @@ function deleteMeal(idx) {
 function clearAllLoggedMeals() {
     if (confirm('Clear entire daily food log?')) {
         STATE.meals = [];
-        localStorage.setItem('nutripulse_meals', JSON.stringify(STATE.meals));
+        localStorage.setItem('TikTok Pulse_meals', JSON.stringify(STATE.meals));
         renderDashboard();
         renderMealLogs();
     }
@@ -617,7 +612,7 @@ function clearAllLoggedMeals() {
 // Water log modifications
 function updateWater(amt) {
     STATE.water = Math.max(0, STATE.water + amt);
-    localStorage.setItem('nutripulse_water', STATE.water.toString());
+    localStorage.setItem('TikTok Pulse_water', STATE.water.toString());
     renderDashboard();
 }
 
@@ -633,7 +628,7 @@ async function queryFireworksAPI(systemPrompt, userPrompt, base64Image = null) {
 
     if (base64Image) {
         // Swap to visual model automatically for multimodal request
-        modelName = 'accounts/fireworks/models/qwen3p7-plus';
+        modelName = 'accounts/fireworks/models/llama-v3p2-11b-vision-instruct';
         messageContent = [
             { type: 'text', text: userPrompt },
             {
@@ -808,7 +803,7 @@ async function handleCoachChat(messageText = '') {
         let coachResponse = '';
         
         if (STATE.apiKey) {
-            const systemPrompt = `You are NutriPulse AI Coach, a supportive, certified sports nutritionist and health guide.
+            const systemPrompt = `You are TikTok Pulse AI Coach, a supportive, certified sports nutritionist and health guide.
             Keep your answers concise, engaging, and focused on wellness. Offer actionable food substitutions or recipes. Use bullet points for layout where appropriate. Always match user queries scientifically. Current logged food count: ${STATE.meals.length} meals.`;
             
             const context = STATE.chatHistory.slice(0, tempLoaderIdx);
@@ -821,7 +816,7 @@ async function handleCoachChat(messageText = '') {
         }
         
         STATE.chatHistory[tempLoaderIdx] = { role: 'assistant', content: coachResponse };
-        localStorage.setItem('nutripulse_chat', JSON.stringify(STATE.chatHistory));
+        localStorage.setItem('TikTok Pulse_chat', JSON.stringify(STATE.chatHistory));
         renderChatMessages();
         
     } catch (err) {
@@ -862,12 +857,12 @@ function setupEventListeners() {
         };
 
         STATE.userProfile = profile;
-        localStorage.setItem('nutripulse_user_profile', JSON.stringify(profile));
+        localStorage.setItem('TikTok Pulse_user_profile', JSON.stringify(profile));
 
         // Automatically calculate daily targets
         const recommendedTargets = calculateOptimalTargets(profile);
         STATE.targets = recommendedTargets;
-        localStorage.setItem('nutripulse_targets', JSON.stringify(recommendedTargets));
+        localStorage.setItem('TikTok Pulse_targets', JSON.stringify(recommendedTargets));
 
         initWeeklyHistory();
         showDashboardView();
@@ -876,18 +871,18 @@ function setupEventListeners() {
     // Log Out click
     elements.logoutBtn.addEventListener('click', () => {
         if (confirm('Are you sure you want to sign out and clear your profile data?')) {
-            localStorage.removeItem('nutripulse_user_profile');
-            localStorage.removeItem('nutripulse_meals');
-            localStorage.removeItem('nutripulse_water');
-            localStorage.removeItem('nutripulse_chat');
-            localStorage.removeItem('nutripulse_weekly_history');
+            localStorage.removeItem('TikTok Pulse_user_profile');
+            localStorage.removeItem('TikTok Pulse_meals');
+            localStorage.removeItem('TikTok Pulse_water');
+            localStorage.removeItem('TikTok Pulse_chat');
+            localStorage.removeItem('TikTok Pulse_weekly_history');
             
             STATE.userProfile = null;
             STATE.meals = [];
             STATE.water = 0;
             STATE.weeklyHistory = null;
             STATE.chatHistory = [
-                { role: 'assistant', content: "Hi! I'm your NutriPulse Coach. I can help analyze meals, adjust recipes, suggest healthy alternatives, or plan your goals. Ask me anything!" }
+                { role: 'assistant', content: "Hi! I'm your TikTok Pulse Coach. I can help analyze meals, adjust recipes, suggest healthy alternatives, or plan your goals. Ask me anything!" }
             ];
 
             showAuthView();
@@ -912,9 +907,9 @@ function setupEventListeners() {
         STATE.targets.carbs = parseInt(elements.profileCarbs.value) || 220;
         STATE.targets.fat = parseInt(elements.profileFat.value) || 65;
         
-        localStorage.setItem('nutripulse_apikey', STATE.apiKey);
-        localStorage.setItem('nutripulse_model', STATE.selectedModel);
-        localStorage.setItem('nutripulse_targets', JSON.stringify(STATE.targets));
+        localStorage.setItem('TikTok Pulse_apikey', STATE.apiKey);
+        localStorage.setItem('TikTok Pulse_model', STATE.selectedModel);
+        localStorage.setItem('TikTok Pulse_targets', JSON.stringify(STATE.targets));
         
         updateAPIStatusUI();
         renderDashboard();
@@ -925,7 +920,7 @@ function setupEventListeners() {
     elements.resetApiSettings.addEventListener('click', () => {
         elements.apiKeyInput.value = '';
         STATE.apiKey = '';
-        localStorage.removeItem('nutripulse_apikey');
+        localStorage.removeItem('TikTok Pulse_apikey');
         updateAPIStatusUI();
         elements.settingsModal.classList.remove('active');
     });
@@ -943,7 +938,7 @@ function setupEventListeners() {
     elements.resetWater.addEventListener('click', () => {
         if (confirm('Reset daily water intake log?')) {
             STATE.water = 0;
-            localStorage.setItem('nutripulse_water', '0');
+            localStorage.setItem('TikTok Pulse_water', '0');
             renderDashboard();
         }
     });
@@ -1026,9 +1021,9 @@ function setupEventListeners() {
     elements.clearChat.addEventListener('click', () => {
         if (confirm('Clear chat conversation history?')) {
             STATE.chatHistory = [
-                { role: 'assistant', content: "Hi! I'm your NutriPulse Coach. I can help analyze meals, adjust recipes, suggest healthy alternatives, or plan your goals. Ask me anything!" }
+                { role: 'assistant', content: "Hi! I'm your TikTok Pulse Coach. I can help analyze meals, adjust recipes, suggest healthy alternatives, or plan your goals. Ask me anything!" }
             ];
-            localStorage.setItem('nutripulse_chat', JSON.stringify(STATE.chatHistory));
+            localStorage.setItem('TikTok Pulse_chat', JSON.stringify(STATE.chatHistory));
             renderChatMessages();
         }
     });
